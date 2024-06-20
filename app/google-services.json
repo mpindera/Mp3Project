@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "560823999104",
+    "project_id": "projectmp3-19cfc",
+    "storage_bucket": "projectmp3-19cfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560823999104:android:d596d7ed317e52fabca465",
+        "android_client_info": {
+          "package_name": "com.example.mp3project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClhWTYRb3k2ZhQCEU4vGFrNxjcmDvyYq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

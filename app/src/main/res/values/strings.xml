@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Mp3Project</string>
+    <string name="email">john.doe@gmail.com</string>
+    <string name="password">******</string>
+</resources>
