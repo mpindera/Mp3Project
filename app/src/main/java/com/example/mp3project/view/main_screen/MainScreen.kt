@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,21 +52,16 @@ fun MainScreen() {
         .background(brush = gradientBrushL)
 
     ) {
-      Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .weight(1f)
-          .padding(innerPadding)
-      ) {
-        LazyColumn {
-          item {
+      LazyColumn(contentPadding = PaddingValues(top = 20.dp)) {
+        item {
+          repeat(30) {
             Card(
               modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 10.dp)
             ) {
-              repeat(30) {
-                Text(modifier = Modifier.padding(15.dp), text = "Item $it")
-              }
+
+              Text(modifier = Modifier.padding(15.dp), text = "Item $it")
             }
           }
         }
