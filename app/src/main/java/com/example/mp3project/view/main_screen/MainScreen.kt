@@ -51,36 +51,6 @@ fun MainScreen() {
         .background(brush = gradientBrushL)
 
     ) {
-      ScrollableTabRow(
-        selectedTabIndex = selectedTabIndex,
-        edgePadding = 16.dp,
-        contentColor = Color.White,
-        containerColor = Color.Transparent,
-        indicator = { tabPositions ->
-          SecondaryIndicator(
-            color = Color.Black,
-            modifier = Modifier
-              .tabIndicatorOffset(tabPositions[selectedTabIndex])
-              .fillMaxWidth()
-          )
-        }
-      ) {
-        Tabs(context).tabs.forEachIndexed { index, tab ->
-          Tab(
-            selected = selectedTabIndex == index,
-            onClick = {
-              selectedTabIndex = index
-            },
-          ) {
-            Text(
-              text = tab,
-              modifier = Modifier.padding(8.dp),
-              color = if (selectedTabIndex == index) Color.Black else Color.White
-            )
-          }
-        }
-      }
-
       Box(
         modifier = Modifier
           .fillMaxSize()

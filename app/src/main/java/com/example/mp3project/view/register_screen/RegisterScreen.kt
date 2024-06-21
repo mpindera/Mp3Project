@@ -46,7 +46,7 @@ fun RegisterScreen(
   RegisterViewModel: RegisterViewModel,
   navController: NavHostController
 ) {
-  val coroutineScope = rememberCoroutineScope()
+
   Card(
     modifier = Modifier.fillMaxSize(), shape = RoundedCornerShape(0)
   ) {

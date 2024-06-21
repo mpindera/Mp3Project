@@ -1,5 +1,6 @@
 package com.example.mp3project.view.splash_screen
 
+import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
@@ -21,30 +22,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.size.Scale
 import com.example.mp3project.R
 import com.example.mp3project.model.navigation.Screen
 import com.example.mp3project.view.custom.CustomGradient.gradientBrush
+import com.example.mp3project.viewmodel.LoginViewModel
+import com.example.mp3project.viewmodel.SplashViewModel
+import com.example.mp3project.viewmodel.auth.AuthManager
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
+fun SplashScreen(
+  navController: NavHostController,
+  sharedPreferences: SharedPreferences,
+  splashViewModel: SplashViewModel,
+  authManager: AuthManager,
+  loginViewModel: LoginViewModel
+) {
   var visible by remember {
     mutableStateOf(false)
   }
@@ -92,19 +95,7 @@ fun SplashScreen(navController: NavHostController) {
       delay(3000)
       visible = false
       delay(1500)
-
-      navController.navigate(Screen.LoginScreen.route) {
-        popUpTo(Screen.SplashScreen.route) {
-          inclusive = true
-        }
-      }
+      splashViewModel.CheckLogged(sharedPreferences,authManager,navController,loginViewModel)
     }
   }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun TestSplashScreen() {
-  val navController = rememberNavController()
-  SplashScreen(navController)
 }

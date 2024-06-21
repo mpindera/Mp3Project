@@ -15,13 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +29,7 @@ import com.example.mp3project.view.splash_screen.SplashScreen
 import com.example.mp3project.viewmodel.ApiViewModel
 import com.example.mp3project.viewmodel.LoginViewModel
 import com.example.mp3project.viewmodel.RegisterViewModel
+import com.example.mp3project.viewmodel.SplashViewModel
 import com.example.mp3project.viewmodel.auth.AuthManager
 import com.example.mp3project.viewmodel.auth.AuthRepository
 import com.example.mp3project.viewmodel.auth.AuthRepositoryImpl
@@ -45,8 +41,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   private val fetchingViewModel by viewModels<ApiViewModel>()
-  private val LoginViewModel by viewModels<LoginViewModel>()
-  private val RegisterViewModel by viewModels<RegisterViewModel>()
+  private val loginViewModel by viewModels<LoginViewModel>()
+  private val registerViewModel by viewModels<RegisterViewModel>()
+  private val splashViewModel by viewModels<SplashViewModel>()
 
   @SuppressLint("CoroutineCreationDuringComposition")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,20 +58,7 @@ class MainActivity : ComponentActivity() {
 
 
       val sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE)
-      val savedEmail = sharedPreferences.getString("email", null)
-      val savedPassword = sharedPreferences.getString("password", null)
-      if (savedEmail != null && savedPassword != null) {
-        lifecycleScope.launch {
-          authManager.login(
-            savedEmail,
-            savedPassword,
-            navController,
-            LoginViewModel
-          )
-        }
-      } else {
-        navController.navigate(Screen.SplashScreen.route)
-      }
+
 
 
       Mp3ProjectTheme {
@@ -82,16 +66,16 @@ class MainActivity : ComponentActivity() {
         {
           NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
             composable(Screen.SplashScreen.route) {
-              SplashScreen(navController)
+              SplashScreen(navController,sharedPreferences,splashViewModel,authManager,loginViewModel)
             }
             composable(Screen.LoginScreen.route) {
-              LoginScreen(LoginViewModel, navController, authManager)
+              LoginScreen(loginViewModel, navController, authManager)
             }
             composable(Screen.MainScreen.route) {
               MainScreen()
             }
             composable(Screen.RegisterScreen.route) {
-              RegisterScreen(RegisterViewModel, navController)
+              RegisterScreen(registerViewModel, navController)
             }
           }
         }
