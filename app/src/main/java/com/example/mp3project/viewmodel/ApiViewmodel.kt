@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ApiViewmodel @Inject constructor(
+class ApiViewModel @Inject constructor(
   private val service: Service
 ) : ViewModel() {
 

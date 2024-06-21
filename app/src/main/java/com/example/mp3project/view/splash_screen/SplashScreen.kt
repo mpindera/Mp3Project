@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -39,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.size.Scale
 import com.example.mp3project.R
 import com.example.mp3project.model.navigation.Screen
+import com.example.mp3project.view.custom.CustomGradient.gradientBrush
 import kotlinx.coroutines.delay
 
 @Composable
@@ -46,18 +48,6 @@ fun SplashScreen(navController: NavHostController) {
   var visible by remember {
     mutableStateOf(false)
   }
-
-  val lighterRed = lerp(Color.Red, Color.White, 0.5f)
-  val lighterBlue = lerp(Color.Black, Color.White, 0.2f)
-
-  val gradientBrush = Brush.linearGradient(
-    colors = listOf(
-      lighterRed,
-      lighterBlue
-    ),
-    start = Offset.Zero,
-    end = Offset.Infinite
-  )
 
   Box(
     contentAlignment = Alignment.Center, modifier = Modifier
@@ -68,6 +58,7 @@ fun SplashScreen(navController: NavHostController) {
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
       AnimatedVisibility(
         visible = visible,
         enter = expandVertically(animationSpec = tween(durationMillis = 2000)),
@@ -85,7 +76,7 @@ fun SplashScreen(navController: NavHostController) {
         exit = fadeOut(animationSpec = tween(durationMillis = 2000))
       ) {
         Text(
-          text = "RSS News",
+          text = stringResource(id = R.string.rss_news),
           fontWeight = FontWeight.Bold,
           fontSize = 40.sp,
           letterSpacing = 5.sp,
@@ -101,6 +92,7 @@ fun SplashScreen(navController: NavHostController) {
       delay(3000)
       visible = false
       delay(1500)
+
       navController.navigate(Screen.LoginScreen.route) {
         popUpTo(Screen.SplashScreen.route) {
           inclusive = true

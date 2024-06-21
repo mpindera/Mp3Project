@@ -1,6 +1,5 @@
-package com.example.mp3project.view.login_screen
+package com.example.mp3project.view.register_screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,48 +13,47 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mp3project.R
 import com.example.mp3project.model.navigation.Screen
 import com.example.mp3project.view.custom.CustomGradient.gradientBrush
-import com.example.mp3project.viewmodel.LoginViewModel
-import com.example.mp3project.viewmodel.auth.AuthManager
-
+import com.example.mp3project.viewmodel.RegisterViewModel
 
 @Composable
-fun LoginScreen(
-  LoginViewModel: LoginViewModel,
-  navController: NavHostController,
-  authManager: AuthManager
+fun RegisterScreen(
+  RegisterViewModel: RegisterViewModel,
+  navController: NavHostController
 ) {
+  val coroutineScope = rememberCoroutineScope()
   Card(
     modifier = Modifier.fillMaxSize(), shape = RoundedCornerShape(0)
   ) {
     Box(modifier = Modifier.background(gradientBrush)) {
       ElevatedCard(
         modifier = Modifier
-          .padding(top = 200.dp)
+          .padding(top = 150.dp)
           .fillMaxSize()
           .clip(RoundedCornerShape(topStart = 150.dp)),
         elevation = CardDefaults.elevatedCardElevation(250.dp)
@@ -69,7 +67,7 @@ fun LoginScreen(
             modifier = Modifier
               .align(Alignment.TopCenter)
               .padding(25.dp),
-            text = stringResource(id = R.string.login),
+            text = stringResource(id = R.string.register),
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp,
             letterSpacing = 5.sp,
@@ -78,9 +76,8 @@ fun LoginScreen(
           )
 
           Column(modifier = Modifier.align(Alignment.Center)) {
-
             /**
-             * Login
+             * Name
              * **/
             TextField(
               modifier = Modifier
@@ -88,14 +85,14 @@ fun LoginScreen(
                 .padding(16.dp)
                 .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
                 .clip(RoundedCornerShape(30.dp)),
-              value = LoginViewModel.email,
+              value = RegisterViewModel.name,
               onValueChange = {
-                LoginViewModel.changeLoginText(it)
+                RegisterViewModel.changeNameText(it)
               },
               label = {
                 Text(
                   fontSize = 20.sp,
-                  text = stringResource(id = R.string.login_label),
+                  text = stringResource(id = R.string.name_text),
                   fontFamily = FontFamily.Cursive
                 )
               },
@@ -104,7 +101,7 @@ fun LoginScreen(
             )
 
             /**
-             * Passsword
+             * Email
              * **/
             TextField(
               modifier = Modifier
@@ -112,9 +109,33 @@ fun LoginScreen(
                 .padding(16.dp)
                 .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
                 .clip(RoundedCornerShape(30.dp)),
-              value = LoginViewModel.password,
+              value = RegisterViewModel.email,
               onValueChange = {
-                LoginViewModel.changePasswordText(it)
+                RegisterViewModel.changeEmailText(it)
+              },
+              label = {
+                Text(
+                  fontSize = 20.sp,
+                  text = stringResource(id = R.string.email),
+                  fontFamily = FontFamily.Cursive
+                )
+              },
+              maxLines = 1,
+              colors = TextFieldDefaults.colors(Color.Black)
+            )
+
+            /**
+             * Password
+             * **/
+            TextField(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
+                .clip(RoundedCornerShape(30.dp)),
+              value = RegisterViewModel.password,
+              onValueChange = {
+                RegisterViewModel.changePasswordText(it)
               },
               label = {
                 Text(
@@ -123,11 +144,38 @@ fun LoginScreen(
                   fontFamily = FontFamily.Cursive
                 )
               },
-
               maxLines = 1,
               colors = TextFieldDefaults.colors(Color.Black),
               keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
               visualTransformation = PasswordVisualTransformation()
+
+            )
+
+            /**
+             * Confirm Password
+             * **/
+            TextField(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
+                .clip(RoundedCornerShape(30.dp)),
+              value = RegisterViewModel.confirmPassword,
+              onValueChange = {
+                RegisterViewModel.changeConfirmPasswordText(it)
+              },
+              label = {
+                Text(
+                  fontSize = 20.sp,
+                  text = stringResource(id = R.string.confirm_password_label),
+                  fontFamily = FontFamily.Cursive
+                )
+              },
+              maxLines = 1,
+              colors = TextFieldDefaults.colors(Color.Black),
+              keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+              visualTransformation = PasswordVisualTransformation()
+
             )
 
             ElevatedButton(modifier = Modifier
@@ -138,32 +186,21 @@ fun LoginScreen(
               shape = ShapeDefaults.Medium,
               colors = ButtonDefaults.buttonColors(Color.White),
               onClick = {
-                LoginViewModel.checkValidationLogin(
-                  navController = navController,
-                  LoginViewModel = LoginViewModel
-                )
+                RegisterViewModel.checkValidation(navController, RegisterViewModel)
               }) {
               Text(
                 fontFamily = FontFamily.Cursive,
                 fontSize = 20.sp,
-                text = stringResource(id = R.string.login),
+                text = stringResource(id = R.string.register),
                 color = Color.Black
               )
             }
 
-            IconButton(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {
-
-            }) {
-              Image(
-                painter = painterResource(id = R.drawable.google_login), contentDescription = null
-              )
-            }
-
             TextButton(modifier = Modifier.fillMaxWidth(), onClick = {
-              navController.navigate(Screen.RegisterScreen.route)
+              navController.navigate(Screen.LoginScreen.route)
             }) {
               Text(
-                text = stringResource(id = R.string.dont_have_account),
+                text = stringResource(id = R.string.have_account),
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Cursive,
                 color = Color.White
@@ -174,4 +211,14 @@ fun LoginScreen(
       }
     }
   }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun RegisterScreenPreview() {
+  val context = LocalContext.current
+  val coroutineScope = rememberCoroutineScope()
+  val register = RegisterViewModel(context, coroutineScope)
+  val navController = rememberNavController()
+  RegisterScreen(register, navController)
 }
