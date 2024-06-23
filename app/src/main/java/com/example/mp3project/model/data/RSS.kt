@@ -1,6 +1,7 @@
 package com.example.mp3project.model.data
 
 import org.simpleframework.xml.Element
+import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 
 
@@ -23,9 +24,9 @@ data class RSS @JvmOverloads constructor(
   @param:Element(name = "pubDate")
   var pubDate: String,
 
-  @field:Element(name = "enclosure")
-  @param:Element(name = "enclosure")
-  var enclosure: List<Enclosure>
+  @field:ElementList(name = "enclosure", inline = true, required = false)
+  @param:ElementList(name = "enclosure", inline = true, required = false)
+  var enclosure: List<Enclosure> = listOf()
 
 
 )

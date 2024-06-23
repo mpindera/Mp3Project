@@ -12,7 +12,7 @@ data class Feed @JvmOverloads constructor(
   @param:Element(name = "title")
   @field:Path("channel")
   @param:Path("channel")
-  var channelTitle: String? = null,
+  var channelTitle: String? = "",
 
   @field:ElementList(name = "item", inline = true, required = false)
   @param:ElementList(name = "item", inline = true, required = false)

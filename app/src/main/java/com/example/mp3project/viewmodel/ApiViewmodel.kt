@@ -22,21 +22,122 @@ class ApiViewModel @Inject constructor(
 ) : ViewModel() {
 
   val feedLiveData: MutableLiveData<Feed> = MutableLiveData()
-  val fullName: MutableState<String?> = mutableStateOf(null)
   val fullItem: MutableState<List<RSS>> = mutableStateOf(emptyList())
 
-  fun getPost() {
+  fun getPostsFromWszystkieRSS() {
     viewModelScope.launch {
+      resetState()
       try {
-        val response = service.fetchPolska()
+        val response = service.fetchWszystkie()
         feedLiveData.value = response
-
-        fullName.value = response.channelTitle
         fullItem.value = response.articleList
 
       } catch (e: Exception) {
         Log.d("ERROR", e.toString())
       }
     }
+  }
+
+  fun getPostFromPolskaRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchPolska()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromSwiatRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchSwiat()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromBiznesRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchBiznes()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromTechnologieRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchTechnologie()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromMotoRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchMoto()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromKulturaRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchKultura()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  fun getPostFromSportRSS() {
+    viewModelScope.launch {
+      resetState()
+      try {
+        val response = service.fetchSport()
+        feedLiveData.value = response
+        fullItem.value = response.articleList
+
+      } catch (e: Exception) {
+        Log.d("ERROR", e.toString())
+      }
+    }
+  }
+
+  private fun resetState() {
+    feedLiveData.value = null
+    fullItem.value = emptyList()
   }
 }

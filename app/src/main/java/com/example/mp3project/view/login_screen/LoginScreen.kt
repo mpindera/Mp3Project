@@ -45,7 +45,7 @@ import com.example.mp3project.viewmodel.auth.AuthManager
 
 @Composable
 fun LoginScreen(
-  LoginViewModel: LoginViewModel,
+  loginViewModel: LoginViewModel,
   navController: NavHostController,
   authManager: AuthManager
 ) {
@@ -88,9 +88,9 @@ fun LoginScreen(
                 .padding(16.dp)
                 .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
                 .clip(RoundedCornerShape(30.dp)),
-              value = LoginViewModel.email,
+              value = loginViewModel.email,
               onValueChange = {
-                LoginViewModel.changeLoginText(it)
+                loginViewModel.changeLoginText(it)
               },
               label = {
                 Text(
@@ -112,9 +112,9 @@ fun LoginScreen(
                 .padding(16.dp)
                 .shadow(elevation = 30.dp, shape = ShapeDefaults.Medium)
                 .clip(RoundedCornerShape(30.dp)),
-              value = LoginViewModel.password,
+              value = loginViewModel.password,
               onValueChange = {
-                LoginViewModel.changePasswordText(it)
+                loginViewModel.changePasswordText(it)
               },
               label = {
                 Text(
@@ -138,9 +138,9 @@ fun LoginScreen(
               shape = ShapeDefaults.Medium,
               colors = ButtonDefaults.buttonColors(Color.White),
               onClick = {
-                LoginViewModel.checkValidationLogin(
+                loginViewModel.checkValidationLogin(
                   navController = navController,
-                  LoginViewModel = LoginViewModel
+                  loginViewModel = loginViewModel
                 )
               }) {
               Text(

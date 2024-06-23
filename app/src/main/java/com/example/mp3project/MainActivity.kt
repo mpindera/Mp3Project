@@ -30,6 +30,7 @@ import com.example.mp3project.viewmodel.ApiViewModel
 import com.example.mp3project.viewmodel.LoginViewModel
 import com.example.mp3project.viewmodel.RegisterViewModel
 import com.example.mp3project.viewmodel.SplashViewModel
+import com.example.mp3project.viewmodel.TopAppBarViewModel
 import com.example.mp3project.viewmodel.auth.AuthManager
 import com.example.mp3project.viewmodel.auth.AuthRepository
 import com.example.mp3project.viewmodel.auth.AuthRepositoryImpl
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
   private val loginViewModel by viewModels<LoginViewModel>()
   private val registerViewModel by viewModels<RegisterViewModel>()
   private val splashViewModel by viewModels<SplashViewModel>()
+  private val topAppBarViewModel by viewModels<TopAppBarViewModel>()
 
   @SuppressLint("CoroutineCreationDuringComposition")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +57,7 @@ class MainActivity : ComponentActivity() {
       val authRepository: AuthRepository =
         AuthRepositoryImpl(firebaseAuth = FirebaseAuth.getInstance())
       val authManager = AuthManager(authRepository, context)
-
-
       val sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE)
-
-
 
       Mp3ProjectTheme {
         Surface(modifier = Modifier.fillMaxSize())
@@ -72,7 +70,7 @@ class MainActivity : ComponentActivity() {
               LoginScreen(loginViewModel, navController, authManager)
             }
             composable(Screen.MainScreen.route) {
-              MainScreen()
+              MainScreen(topAppBarViewModel,fetchingViewModel)
             }
             composable(Screen.RegisterScreen.route) {
               RegisterScreen(registerViewModel, navController)
@@ -90,11 +88,8 @@ fun Greeting(
   modifier: PaddingValues, coroutine: CoroutineScope, fetchingViewModel: ApiViewModel
 ) {
   coroutine.launch {
-    fetchingViewModel.getPost()
+//    fetchingViewModel.getPost()
   }
-  Text(
-    modifier = Modifier.padding(modifier), text = fetchingViewModel.fullName.value.toString()
-  )
   LazyColumn(modifier = Modifier.padding(modifier)) {
     items(fetchingViewModel.fullItem.value) { i ->
       Text(text = i.title)

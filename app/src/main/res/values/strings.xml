@@ -18,11 +18,12 @@
     <string name="error_password_invalid">The given password is invalid. [ Password should be at least 6 characters ]</string>
     <string name="error_register_person_validation">You must fill in all the fields</string>
     <string name="rss_news">RSS News</string>
+    <string name="wszystkie">Wszystkie</string>
     <string name="polska">Polska</string>
     <string name="biznes">Biznes</string>
     <string name="technologie">Technologie</string>
     <string name="moto">Moto</string>
     <string name="kultura">Kultura</string>
-    <string name="czysta_polska">Czysta Polska</string>
-    <string name="wideo">Wideo</string>
+    <string name="swiat">Świat</string>
+    <string name="sport">Sport</string>
 </resources>

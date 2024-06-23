@@ -96,6 +96,7 @@ fun SplashScreen(
       visible = false
       delay(1500)
       splashViewModel.CheckLogged(sharedPreferences,authManager,navController,loginViewModel)
+      delay(1000)
     }
   }
 }

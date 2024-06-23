@@ -34,10 +34,10 @@ class LoginViewModel @Inject constructor(
     password = passwordText
   }
 
-  fun checkValidationLogin(navController: NavHostController, LoginViewModel: LoginViewModel) {
+  fun checkValidationLogin(navController: NavHostController, loginViewModel: LoginViewModel) {
     if ((email.isNotEmpty() && email.isNotBlank() && password.isNotBlank() && password.isNotEmpty())) {
       coroutineScope.launch {
-        authManager.login(email, password, navController, LoginViewModel)
+        authManager.login(email, password, navController, loginViewModel)
       }
     } else {
       viewModelScope.launch {

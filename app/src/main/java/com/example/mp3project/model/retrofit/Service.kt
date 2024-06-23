@@ -6,8 +6,14 @@ import retrofit2.http.GET
 
 interface Service {
 
+  @GET("wszystkie.xml")
+  suspend fun fetchWszystkie(): Feed
+
   @GET("polska.xml")
   suspend fun fetchPolska(): Feed
+
+  @GET("swiat.xml")
+  suspend fun fetchSwiat(): Feed
 
   @GET("biznes.xml")
   suspend fun fetchBiznes(): Feed
@@ -23,11 +29,5 @@ interface Service {
 
   @GET("sport.xml")
   suspend fun fetchSport(): Feed
-
-  @GET("czysta-polska.xml")
-  suspend fun fetchCzystaPolska(): Feed
-
-  @GET("wideo.xml")
-  suspend fun fetchWideo(): Feed
 
 }
