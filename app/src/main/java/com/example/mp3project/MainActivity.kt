@@ -1,52 +1,52 @@
 package com.example.mp3project
 
+import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.work.BackoffPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.evernote.android.job.JobManager
 import com.example.mp3project.model.navigation.Screen
 import com.example.mp3project.ui.theme.Mp3ProjectTheme
+import com.example.mp3project.view.favorite_screen.FavoriteScreen
 import com.example.mp3project.view.login_screen.LoginScreen
 import com.example.mp3project.view.main_screen.MainScreen
 import com.example.mp3project.view.register_screen.RegisterScreen
 import com.example.mp3project.view.splash_screen.SplashScreen
-import com.example.mp3project.viewmodel.ApiViewModel
-import com.example.mp3project.viewmodel.LoginViewModel
-import com.example.mp3project.viewmodel.RegisterViewModel
-import com.example.mp3project.viewmodel.SplashViewModel
-import com.example.mp3project.viewmodel.TopAppBarViewModel
 import com.example.mp3project.viewmodel.auth.AuthManager
 import com.example.mp3project.viewmodel.auth.AuthRepository
 import com.example.mp3project.viewmodel.auth.AuthRepositoryImpl
+import com.example.mp3project.viewmodel.worker.ApiWorker
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  private val fetchingViewModel by viewModels<ApiViewModel>()
-  private val loginViewModel by viewModels<LoginViewModel>()
-  private val registerViewModel by viewModels<RegisterViewModel>()
-  private val splashViewModel by viewModels<SplashViewModel>()
-  private val topAppBarViewModel by viewModels<TopAppBarViewModel>()
-
+  @RequiresApi(Build.VERSION_CODES.O)
   @SuppressLint("CoroutineCreationDuringComposition")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -57,44 +57,61 @@ class MainActivity : ComponentActivity() {
       val authRepository: AuthRepository =
         AuthRepositoryImpl(firebaseAuth = FirebaseAuth.getInstance())
       val authManager = AuthManager(authRepository, context)
-      val sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE)
+
+      requestNotificationPermission()
 
       Mp3ProjectTheme {
-        Surface(modifier = Modifier.fillMaxSize())
-        {
+        Surface(modifier = Modifier.fillMaxSize()) {
           NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
             composable(Screen.SplashScreen.route) {
-              SplashScreen(navController,sharedPreferences,splashViewModel,authManager,loginViewModel)
+              SplashScreen(navController, authManager, context)
             }
             composable(Screen.LoginScreen.route) {
-              LoginScreen(loginViewModel, navController, authManager)
+              LoginScreen(navController)
             }
             composable(Screen.MainScreen.route) {
-              MainScreen(topAppBarViewModel,fetchingViewModel)
+              MainScreen(navController, authManager, authRepository)
             }
             composable(Screen.RegisterScreen.route) {
-              RegisterScreen(registerViewModel, navController)
+              RegisterScreen(navController)
+            }
+            composable(Screen.FavoriteScreen.route) {
+              FavoriteScreen(navController, authManager, authRepository)
             }
           }
         }
       }
     }
   }
-}
 
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun Greeting(
-  modifier: PaddingValues, coroutine: CoroutineScope, fetchingViewModel: ApiViewModel
-) {
-  coroutine.launch {
-//    fetchingViewModel.getPost()
-  }
-  LazyColumn(modifier = Modifier.padding(modifier)) {
-    items(fetchingViewModel.fullItem.value) { i ->
-      Text(text = i.title)
-      Text(text = i.description)
-      Text(text = i.link)
+  private var requestPermissionLauncher: ActivityResultLauncher<String> =
+    registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+      if (!isGranted) {
+        Log.d("POST_NOTIFICATION_PERMISSION", "USER DENIED PERMISSION")
+      } else {
+        Log.d("POST_NOTIFICATION_PERMISSION", "USER GRANTED PERMISSION")
+      }
+    }
+
+  private fun requestNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      val permission = Manifest.permission.POST_NOTIFICATIONS
+      when {
+        ContextCompat.checkSelfPermission(
+          this, permission
+        ) == PackageManager.PERMISSION_GRANTED -> {
+          Toast.makeText(this, "Permission granted", Toast.LENGTH_LONG).show()
+        }
+
+        shouldShowRequestPermissionRationale(permission) -> {
+          Toast.makeText(this, "Permission denied permanently", Toast.LENGTH_LONG).show()
+        }
+
+        else -> {
+          requestPermissionLauncher.launch(permission)
+        }
+      }
     }
   }
 }
+

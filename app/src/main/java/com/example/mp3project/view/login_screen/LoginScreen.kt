@@ -21,6 +21,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,20 +39,39 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mp3project.R
 import com.example.mp3project.model.navigation.Screen
 import com.example.mp3project.view.custom.CustomGradient.gradientBrush
 import com.example.mp3project.viewmodel.LoginViewModel
 import com.example.mp3project.viewmodel.auth.AuthManager
+import com.example.mp3project.viewmodel.auth.rememberFirebaseAuthLauncher
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 
 @Composable
 fun LoginScreen(
-  loginViewModel: LoginViewModel,
   navController: NavHostController,
-  authManager: AuthManager
+  loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
+  var user by remember { mutableStateOf(Firebase.auth.currentUser) }
+  val launcher = rememberFirebaseAuthLauncher(
+    navController,
+    onAuthComplete = { result ->
+      user = result.user
+    },
+    onAuthError = {
+      user = null
+    }
+  )
+  val token = stringResource(R.string.default_web)
+  val context = LocalContext.current
+
+
   Card(
     modifier = Modifier.fillMaxSize(), shape = RoundedCornerShape(0)
   ) {
@@ -152,7 +175,13 @@ fun LoginScreen(
             }
 
             IconButton(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {
-
+              val gso =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                  .requestIdToken(token)
+                  .requestEmail()
+                  .build()
+              val googleSignInClient = GoogleSignIn.getClient(context, gso)
+              launcher.launch(googleSignInClient.signInIntent)
             }) {
               Image(
                 painter = painterResource(id = R.drawable.google_login), contentDescription = null

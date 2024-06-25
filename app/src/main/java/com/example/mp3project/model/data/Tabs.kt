@@ -13,6 +13,7 @@ class Tabs(val context: Context) {
     context.getString(R.string.technologie),
     context.getString(R.string.moto),
     context.getString(R.string.kultura),
-    context.getString(R.string.sport)
+    context.getString(R.string.sport),
+    context.getString(R.string.favorite)
   )
 }

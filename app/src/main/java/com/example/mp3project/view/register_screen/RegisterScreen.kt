@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mp3project.R
@@ -43,8 +44,8 @@ import com.example.mp3project.viewmodel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
-  RegisterViewModel: RegisterViewModel,
-  navController: NavHostController
+  navController: NavHostController,
+  RegisterViewModel: RegisterViewModel= hiltViewModel()
 ) {
 
   Card(
@@ -216,9 +217,6 @@ fun RegisterScreen(
 @Composable
 @Preview(showBackground = true)
 fun RegisterScreenPreview() {
-  val context = LocalContext.current
-  val coroutineScope = rememberCoroutineScope()
-  val register = RegisterViewModel(context, coroutineScope)
   val navController = rememberNavController()
-  RegisterScreen(register, navController)
+  RegisterScreen(navController)
 }

@@ -63,19 +63,23 @@ dependencies {
   implementation(libs.androidx.espresso.core)
   implementation(libs.firebase.firestore.ktx)
   implementation(libs.firebase.storage.ktx)
+  implementation(libs.androidx.hilt.common)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(platform(libs.androidx.compose.bom))
   androidTestImplementation(libs.androidx.ui.test.junit4)
   debugImplementation(libs.androidx.ui.tooling)
   debugImplementation(libs.androidx.ui.test.manifest)
+  implementation(libs.androidx.work.runtime.ktx)
+
+  implementation(libs.play.services.auth)
 
   /** Navigation **/
   implementation(libs.androidx.navigation.compose)
 
   /** ViewModel **/
   implementation(libs.androidx.lifecycle.viewmodel.compose)
-
+  implementation(libs.android.job)
   /** Coil **/
   implementation(libs.coil.compose)
   implementation(libs.accompanist.permissions)
@@ -88,11 +92,11 @@ dependencies {
     exclude(group = "xpp3")
   }
 
-  implementation (libs.logging.interceptor)
+  implementation(libs.logging.interceptor)
   implementation(libs.jakewharton.retrofit2.kotlin.coroutines.adapter)
 
   /** Dagger - Hilt **/
-  implementation( libs.hilt.android)
+  implementation(libs.hilt.android)
   kapt(libs.hilt.compiler)
   implementation(libs.androidx.hilt.navigation.compose)
 

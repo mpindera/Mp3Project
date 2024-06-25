@@ -18,6 +18,8 @@
     <string name="error_password_invalid">The given password is invalid. [ Password should be at least 6 characters ]</string>
     <string name="error_register_person_validation">You must fill in all the fields</string>
     <string name="rss_news">RSS News</string>
+    <string name="rss">RSS</string>
+    <string name="news">News</string>
     <string name="wszystkie">Wszystkie</string>
     <string name="polska">Polska</string>
     <string name="biznes">Biznes</string>
@@ -26,4 +28,6 @@
     <string name="kultura">Kultura</string>
     <string name="swiat">Świat</string>
     <string name="sport">Sport</string>
+    <string name="favorite">Favorite</string>
+    <string name="default_web">560823999104-nj0boa9l1t9ib7jsaapcvbihopuuer76.apps.googleusercontent.com</string>
 </resources>
